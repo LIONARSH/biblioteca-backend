@@ -1,9 +1,9 @@
-// src/usuarios/usuarios.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from './usuario.entity';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import * as bcrypt from 'bcrypt'; 
 
 @Injectable()
 export class UsuariosService {
@@ -12,9 +12,13 @@ export class UsuariosService {
     private usuariosRepository: Repository<Usuario>,
   ) {}
 
-  create(createUsuarioDto: CreateUsuarioDto) {
+  async create(createUsuarioDto: CreateUsuarioDto) {
+    // Generar el hash de la contraseña antes de guardar
+    const salt = await bcrypt.genSalt();
+    createUsuarioDto.password = await bcrypt.hash(createUsuarioDto.password, salt);
+
     const nuevoUsuario = this.usuariosRepository.create(createUsuarioDto);
-    return this.usuariosRepository.save(nuevoUsuario);
+    return await this.usuariosRepository.save(nuevoUsuario);
   }
 
   findAll() {
@@ -27,14 +31,9 @@ export class UsuariosService {
     return usuario;
   }
 
-  async update(id: number, updateDto: any) {
-    const usuario = await this.findOne(id);
-    Object.assign(usuario, updateDto);
-    return this.usuariosRepository.save(usuario);
-  }
-
-  async remove(id: number) {
-    const usuario = await this.findOne(id);
-    return this.usuariosRepository.remove(usuario);
+  async findOneByEmail(email: string): Promise<Usuario | null> {
+    return await this.usuariosRepository.findOne({ 
+      where: { email: email } 
+    });
   }
 }

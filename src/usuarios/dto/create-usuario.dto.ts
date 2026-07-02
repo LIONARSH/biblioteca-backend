@@ -9,4 +9,5 @@ export class CreateUsuarioDto {
   @IsEmail({}, { message: 'El formato del email no es válido' })
   @IsNotEmpty()
   email!: string;
+  password: string;
 }

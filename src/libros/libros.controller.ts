@@ -1,10 +1,13 @@
 // src/libros/libros.controller.ts
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Post, Body } from '@nestjs/common';
 import { LibrosService } from './libros.service';
 import { CreateLibroDto } from './dto/create-libro.dto';
 import { Patch, Param, Delete } from '@nestjs/common';
+import { Controller, UseGuards, Get } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('libros')
+@UseGuards(JwtAuthGuard)
 export class LibrosController {
   constructor(private readonly librosService: LibrosService) {}
 

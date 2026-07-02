@@ -6,6 +6,7 @@ import { LibrosModule } from './libros/libros.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { Libro } from './libros/libro.entity'; 
 import { Usuario } from './usuarios/usuario.entity';  
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { Usuario } from './usuarios/usuario.entity';
     }),
     LibrosModule,
     UsuariosModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
