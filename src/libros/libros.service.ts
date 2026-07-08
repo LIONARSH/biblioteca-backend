@@ -1,28 +1,33 @@
 // src/libros/libros.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Libro } from './libro.entity';
+import { Libro } from './entities/libro.entity';
 import { CreateLibroDto } from './dto/create-libro.dto';
 
 @Injectable()
 export class LibrosService {
   constructor(
-    @InjectRepository(Libro)
+    @Inject('LIBRO_REPOSITORY')
     private librosRepository: Repository<Libro>,
   ) {}
 
   // CREATE
-  create(createLibroDto: CreateLibroDto) {
-    const nuevoLibro = this.librosRepository.create(createLibroDto);
-    return this.librosRepository.save(nuevoLibro);
-  }
+ create(createLibroDto: CreateLibroDto) {
+  // Mapeamos el ID de la categoría a la relación
+  const libro = this.librosRepository.create({
+    ...createLibroDto,
+    categoria: { id: createLibroDto.categoriaId } as any
+  });
+  return this.librosRepository.save(libro);
+}
 
   // READ (All)
-  findAll() {
-    return this.librosRepository.find();
-  }
-
+    findAll() {
+     return this.librosRepository.find({
+       relations: { categoria: true } // Esto hace un LEFT JOIN automático
+  });
+}
   // READ (One)
   async findOne(id: number) {
     const libro = await this.librosRepository.findOneBy({ id });

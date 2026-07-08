@@ -1,14 +1,20 @@
-// src/libros/dto/create-libro.dto.ts
-import { IsString, IsInt, Min } from 'class-validator';
+import { IsString, IsNotEmpty, IsInt, IsPositive } from 'class-validator';
 
 export class CreateLibroDto {
   @IsString()
+  @IsNotEmpty()
   titulo!: string;
 
   @IsString()
+  @IsNotEmpty()
   autor!: string;
 
-  @IsInt()
-  @Min(0)
-  stock!: number;
+  @IsString()
+  @IsNotEmpty()
+  isbn!: string;
+
+  @IsInt()      // Validamos que sea un número entero
+  @IsPositive() // Validamos que sea un ID válido (mayor a 0)
+  @IsNotEmpty()
+  categoriaId!: number;
 }

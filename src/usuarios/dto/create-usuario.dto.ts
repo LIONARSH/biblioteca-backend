@@ -1,13 +1,15 @@
-// src/usuarios/dto/create-usuario.dto.ts
 import { IsString, IsEmail, IsNotEmpty } from 'class-validator';
 
 export class CreateUsuarioDto {
   @IsString()
   @IsNotEmpty()
-  nombre!: string;
+  nombre!: string; // Asegúrate que sea 'nombre' y no 'titulo'
 
-  @IsEmail({}, { message: 'El formato del email no es válido' })
+  @IsEmail()
   @IsNotEmpty()
   email!: string;
-  password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password!: string;
 }
