@@ -2,14 +2,17 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PerfilComponent } from './components/perfil/perfil.component';
 import { CategoriaComponent } from './inventario/components/categoria/categoria.component';
-import { LayoutComponent } from './layout/layout.component';
+import { AppLayoutComponent } from './layout/app.layout.component';
 import { LibroComponent } from './inventario/components/libro/libro.component';
 import { ListaPrestamoComponent } from './prestamo/components/lista-prestamo/lista-prestamo.component';
+import { ProductoComponent } from './inventario/components/producto/producto.component';
+import { ClienteComponent } from './components/cliente/cliente.component';
+import { PersonaComponent } from './components/persona/persona.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: LayoutComponent,
+    component: AppLayoutComponent,
     children: [
       {
         path: 'perfil',
@@ -20,12 +23,24 @@ const routes: Routes = [
         component: CategoriaComponent
       },
       {
+        path: 'producto',
+        component: ProductoComponent
+      },
+      {
         path: 'libro',
         component: LibroComponent
       },
       {
         path: 'prestamo',
         component: ListaPrestamoComponent
+      },
+      {
+        path: 'cliente',
+        component: ClienteComponent
+      },
+      {
+        path: 'persona',
+        component: PersonaComponent
       }
     ]
   }

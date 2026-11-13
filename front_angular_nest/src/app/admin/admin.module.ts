@@ -6,6 +6,7 @@ import { PerfilComponent } from './components/perfil/perfil.component';
 import { ClienteComponent } from './components/cliente/cliente.component';
 import { PersonaComponent } from './components/persona/persona.component';
 import { LayoutComponent } from './layout/layout.component';
+import { AppLayoutModule } from './layout/app.layout.module';
 import { InventarioModule } from './inventario/inventario.module';
 import { PrestamoModule } from './prestamo/prestamo.module';
 
@@ -19,6 +20,7 @@ import { PrestamoModule } from './prestamo/prestamo.module';
   imports: [
     CommonModule,
     AdminRoutingModule,
+    AppLayoutModule,
     InventarioModule,
     PrestamoModule
   ]
