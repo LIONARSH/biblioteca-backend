@@ -11,8 +11,10 @@ export class CategoriaService {
   ) {}
 
   async create(createCategoriaDto: CreateCategoriaDto) {
-    const nuevaCategoria = this.categoriaRepository.create(createCategoriaDto);
-    return await this.categoriaRepository.save(nuevaCategoria);
+    const categoria = new Categoria();
+    categoria.nombre = createCategoriaDto.nombre;
+    categoria.detalle = createCategoriaDto.detalle;
+    return await this.categoriaRepository.save(categoria);
   }
 
   async findAll() {

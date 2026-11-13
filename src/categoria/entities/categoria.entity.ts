@@ -10,6 +10,9 @@ export class Categoria {
   @Column()
   nombre!: string;
 
-@OneToMany(() => Libro, (libro) => libro.categoria)
+  @Column({ nullable: true })
+  detalle?: string;
+
+  @OneToMany(() => Libro, (libro) => libro.categoria)
 libros!: Libro[];
 }
