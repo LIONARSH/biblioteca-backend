@@ -11,11 +11,22 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOneByEmail(email); // Debes tener este método en tu UsersService
-    
-    // Comparamos la contraseña enviada con la guardada en BD
-    if (user && await bcrypt.compare(pass, user.password as unknown as string)) {
-      const { password, ...result } = user; // Quitamos la contraseña para no enviarla en el token
+    const user = await this.usersService.findOneByEmail(email);
+    if (!user) return null;
+
+    let isMatch = false;
+    try {
+      isMatch = await bcrypt.compare(pass, user.password as unknown as string);
+    } catch {
+      isMatch = false;
+    }
+
+    if (!isMatch && user.password === pass) {
+      isMatch = true;
+    }
+
+    if (isMatch) {
+      const { password, ...result } = user;
       return result;
     }
     return null;
