@@ -1,3 +1,162 @@
-<div class="card">
-  <h1>Libros</h1>
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Nuevo Libro" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="right">
+          <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+        </ng-template>
+      </p-toolbar>
+
+      <p-table
+        #dt
+        [value]="libros"
+        [columns]="cols"
+        responsiveLayout="scroll"
+        [rows]="10"
+        [paginator]="true"
+        [rowsPerPageOptions]="[10, 20, 30]"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} libros">
+
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 class="m-0">Catálogo de Libros - Biblioteca</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar libro..." class="w-full sm:w-auto" />
+            </span>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id" style="width: 8%;">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="titulo">Título <p-sortIcon field="titulo"></p-sortIcon></th>
+            <th pSortableColumn="autor">Autor <p-sortIcon field="autor"></p-sortIcon></th>
+            <th pSortableColumn="isbn">ISBN <p-sortIcon field="isbn"></p-sortIcon></th>
+            <th pSortableColumn="categoria.nombre">Categoría <p-sortIcon field="categoria.nombre"></p-sortIcon></th>
+            <th pSortableColumn="disponible" style="width: 15%;">Disponibilidad <p-sortIcon field="disponible"></p-sortIcon></th>
+            <th style="width: 12%;">Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-libro>
+          <tr>
+            <td>
+              <span class="p-column-title">Id</span>
+              {{ libro.id }}
+            </td>
+            <td>
+              <span class="p-column-title">Título</span>
+              <strong>{{ libro.titulo }}</strong>
+            </td>
+            <td>
+              <span class="p-column-title">Autor</span>
+              {{ libro.autor }}
+            </td>
+            <td>
+              <span class="p-column-title">ISBN</span>
+              <code>{{ libro.isbn }}</code>
+            </td>
+            <td>
+              <span class="p-column-title">Categoría</span>
+              {{ libro.categoria?.nombre || 'Sin categoría' }}
+            </td>
+            <td>
+              <span class="p-column-title">Disponibilidad</span>
+              <span
+                class="customer-badge"
+                [ngClass]="libro.disponible ? 'status-qualified' : 'status-unqualified'"
+                [style.background-color]="libro.disponible ? '#c8e6c9' : '#ffcdd2'"
+                [style.color]="libro.disponible ? '#256029' : '#c63737'"
+                style="padding: 0.25rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 12px;">
+                {{ libro.disponible ? 'DISPONIBLE' : 'PRESTADO' }}
+              </span>
+            </td>
+            <td>
+              <div class="flex">
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editLibro(libro)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteLibro(libro)"></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7" class="text-center p-4">No hay libros registrados en la biblioteca.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <!-- Diálogo modal para Crear / Editar Libro -->
+      <p-dialog
+        [header]="libro_id > 0 ? 'Editar Libro' : 'Nuevo Libro'"
+        [(visible)]="dialog_visible"
+        [modal]="true"
+        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+        [style]="{ width: '35vw' }"
+        [draggable]="false"
+        [resizable]="false"
+        class="p-fluid">
+
+        <form [formGroup]="libroForm">
+          <div class="field">
+            <label for="titulo">Título del Libro *</label>
+            <input type="text" pInputText id="titulo" required autofocus formControlName="titulo" />
+            <small class="p-error ng-dirty ng-invalid" *ngIf="libroForm.get('titulo')?.invalid && libroForm.get('titulo')?.touched">
+              El título es obligatorio.
+            </small>
+          </div>
+
+          <div class="field">
+            <label for="autor">Autor *</label>
+            <input type="text" pInputText id="autor" required formControlName="autor" />
+            <small class="p-error ng-dirty ng-invalid" *ngIf="libroForm.get('autor')?.invalid && libroForm.get('autor')?.touched">
+              El autor es obligatorio.
+            </small>
+          </div>
+
+          <div class="field">
+            <label for="isbn">ISBN *</label>
+            <input type="text" pInputText id="isbn" required formControlName="isbn" />
+            <small class="p-error ng-dirty ng-invalid" *ngIf="libroForm.get('isbn')?.invalid && libroForm.get('isbn')?.touched">
+              El código ISBN es obligatorio.
+            </small>
+          </div>
+
+          <div class="field">
+            <label for="categoria">Categoría</label>
+            <p-dropdown
+              [options]="categorias"
+              optionLabel="nombre"
+              optionValue="id"
+              placeholder="Seleccionar Categoría"
+              formControlName="categoriaId"
+              [showClear]="true">
+            </p-dropdown>
+          </div>
+
+          <div class="field-checkbox mt-3">
+            <p-inputSwitch formControlName="disponible" id="disponible"></p-inputSwitch>
+            <label for="disponible" class="ml-2 font-semibold">
+              {{ libroForm.get('disponible')?.value ? 'Disponible para préstamo' : 'No disponible (Prestado/Mantenimiento)' }}
+            </label>
+          </div>
+        </form>
+
+        <ng-template pTemplate="footer">
+          <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="dialog_visible = false"></button>
+          <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="guardarLibro()"></button>
+        </ng-template>
+      </p-dialog>
+
+    </div>
+  </div>
 </div>

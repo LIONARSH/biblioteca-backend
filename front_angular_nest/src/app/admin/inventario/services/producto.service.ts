@@ -26,3 +26,4 @@ export class ProductoService {
     return this.http.delete(`${this.baseUrl}/producto/${id}`);
   }
 }
+

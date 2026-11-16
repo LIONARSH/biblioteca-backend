@@ -9,11 +9,14 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
 import { ToolbarModule } from 'primeng/toolbar';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 import { ProductoComponent } from './components/producto/producto.component';
 import { CategoriaComponent } from './components/categoria/categoria.component';
 import { LibroComponent } from './components/libro/libro.component';
 import { CategoriaService } from './services/categoria.service';
+import { LibroService } from './services/libro.service';
 
 @NgModule({
   declarations: [
@@ -31,10 +34,13 @@ import { CategoriaService } from './services/categoria.service';
     ButtonModule,
     InputTextModule,
     RippleModule,
-    ToolbarModule
+    ToolbarModule,
+    DropdownModule,
+    InputSwitchModule
   ],
   providers: [
-    CategoriaService
+    CategoriaService,
+    LibroService
   ],
   exports: [
     ProductoComponent,

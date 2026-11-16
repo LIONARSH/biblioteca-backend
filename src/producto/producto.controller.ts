@@ -32,3 +32,4 @@ export class ProductoController {
     return this.productoService.remove(+id);
   }
 }
+

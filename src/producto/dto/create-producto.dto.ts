@@ -25,3 +25,4 @@ export class CreateProductoDto {
   @IsNumber()
   categoria_id?: number;
 }
+

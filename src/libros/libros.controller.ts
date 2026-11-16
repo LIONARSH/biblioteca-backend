@@ -1,13 +1,9 @@
 // src/libros/libros.controller.ts
-import { Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { LibrosService } from './libros.service';
 import { CreateLibroDto } from './dto/create-libro.dto';
-import { Patch, Param, Delete } from '@nestjs/common';
-import { Controller, UseGuards, Get } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('libros')
-//@UseGuards(JwtAuthGuard)
 export class LibrosController {
   constructor(private readonly librosService: LibrosService) {}
 
@@ -22,17 +18,17 @@ export class LibrosController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number) {
-    return this.librosService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return this.librosService.findOne(+id);
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() updateLibroDto: any) {
-    return this.librosService.update(id, updateLibroDto);
+  async update(@Param('id') id: string, @Body() updateLibroDto: any) {
+    return this.librosService.update(+id, updateLibroDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number) {
-    return this.librosService.remove(id);
+  async remove(@Param('id') id: string) {
+    return this.librosService.remove(+id);
   }
 }

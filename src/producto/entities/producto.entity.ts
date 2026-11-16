@@ -28,3 +28,4 @@ export class Producto {
   @JoinColumn({ name: 'categoria_id' })
   categoria?: Categoria;
 }
+
