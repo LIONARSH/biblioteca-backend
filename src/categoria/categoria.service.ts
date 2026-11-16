@@ -2,6 +2,7 @@ import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Categoria } from './entities/categoria.entity';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
+import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 
 @Injectable()
 export class CategoriaService {
@@ -18,27 +19,22 @@ export class CategoriaService {
   }
 
   async findAll() {
-    return await this.categoriaRepository.find();
+    return await this.categoriaRepository.find({ order: { id: 'asc' } });
   }
-
-  // src/categoria/categoria.service.ts
 
   async findOne(id: number) {
-    const categoria = await this.categoriaRepository.findOneBy({ id });
-    if (!categoria) {
-      throw new NotFoundException(`Categoría con ID ${id} no encontrada`);
-    }
-    return categoria;
+    return await this.categoriaRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
   }
 
-  async update(id: number, updateCategoriaDto: any) {
-    const categoria = await this.findOne(id); // Reutilizamos findOne
-    Object.assign(categoria, updateCategoriaDto);
-    return await this.categoriaRepository.save(categoria);
+  async update(id: number, updateCategoriaDto: UpdateCategoriaDto) {
+    return await this.categoriaRepository.update(id, updateCategoriaDto);
   }
 
   async remove(id: number) {
-    const categoria = await this.findOne(id);
-    return await this.categoriaRepository.remove(categoria);
+    return await this.categoriaRepository.delete(id);
   }
 }

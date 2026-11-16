@@ -51,38 +51,12 @@
         <td>{{ categoria.nombre }}</td>
         <td>{{ categoria.detalle }}</td>
         <td>
-          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"></button>
-          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"></button>
+          <div class="flex">
+            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editarCategoria(categoria)"></button>
+            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="eliminarCategoria(categoria)"></button>
+          </div>
         </td>
       </tr>
     </ng-template>
   </p-table>
-
-  <!-- Elementos de prueba didáctica solicitados en la Clase 15 -->
-  <div class="mt-4">
-    <ul>
-      @for (cat of categorias; track $index) {
-        <li>{{ cat.nombre }} - {{ cat.detalle }}</li>
-      }
-    </ul>
-
-    <table border="1" style="border-collapse: collapse; min-width: 300px;">
-      <thead>
-        <tr>
-          <th style="padding: 4px 8px;">ID</th>
-          <th style="padding: 4px 8px;">NOMBRE</th>
-          <th style="padding: 4px 8px;">DETALLE</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (cat of categorias; track $index) {
-          <tr>
-            <td style="padding: 4px 8px;">{{ cat.id }}</td>
-            <td style="padding: 4px 8px;">{{ cat.nombre }}</td>
-            <td style="padding: 4px 8px;">{{ cat.detalle }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
 </div>
